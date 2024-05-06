@@ -104,18 +104,18 @@ def compare_outputs(input_text, semantic_output, data_output):
         messages=[
             {
                 "role": "system",
-                "content": "You are a highly efficient database expert that will read the definitions for each of the variables given and fill in the missing values to the best of your ability. You have read and understand the paper Demonstrating NaturalMiner: Searching Large Data Sets for Abstract Patterns Described in Natural Language and are now trying to fill in the missing variables based on this paper.",
+                "content": "You are a highly efficient assistant, who evaluates and rank large language models (LLMs) based on the quality of their responses to the given instruction. This process will create a leaderboard reflecting the most accurate and human-preferred answers.",
             },
             {
                 "role": "user",
-                "content": "I require a leaderboard for two large language model outputs. I'll provide you with prompts given to these models and their corresponding responses. Your task is to assess these responses, ranking the models in order of preference from a human perspective. Once ranked, please output the results in a structured JSON format.\n\n## Prompt\n{\n 'input_text': '"
+                "content": "I require a leaderboard for two large language model outputs. I'll provide you with their corresponding responses. Your task is to assess these responses, ranking the outputs in order of preference from a human perspective. Once ranked, please output the results in a structured JSON format. Prompt: { 'input_text': '"
                 + input_text
-                + "',\n 'instruction': 'Evaluate the two outputs based on the given input_text. Write 1 in Preference if output_1 is better or 2 in Preference if output_2 is better'"
-                + ",\n 'output_1': '"
+                + "', 'instruction': 'Evaluate the two outputs based on the given input_text. Write 1 in Preference if output_1 is better or 2 in Preference if output_2 is better'"
+                + ", 'output_1': '"
                 + semantic_output
-                + "',\n 'output_2': '"
+                + "', 'output_2': '"
                 + data_output
-                + '\n}\n\n## Model Outputs Preference: "" ##Task\nEvaluate and rank the models based on the instruction above.',
+                + "} Model Output: { 'output_1': {output_1}, 'output_2': {output_2}, 'preference': {preference} } \nEvaluate and rank the models based on the instruction above. Make sure not to have \n and \" in the output. Make sure to make it json compatible",
             },
         ],
     )
@@ -149,16 +149,6 @@ def generate_db_specs(nl_pattern, table_name, table_cols):
 
 
 if st.button("Find Pattern!"):
-    print("Generate data text stats")
-    st.write("Generate data text stats...")
-
-    data_message = generate_data_response(db, label)
-    print(data_message)
-    data_df = pd.DataFrame(columns=["output"], index=range(0))
-    new_row = pd.DataFrame([[data_message]], columns=["output"])
-    result_table = st.table(data_df)
-    result_table.add_rows(new_row)
-
     print("Generating DB specifications...")
     st.write("Generating DB specifications...")
 
@@ -270,12 +260,30 @@ if st.button("Find Pattern!"):
 
     result_table.add_rows(result_df)
 
+    st.write("All data subsets generated!")
+
+    print("Generate data text stats")
+    st.write("Generate data text stats...")
+
+    data_message = generate_data_response(db, label)
+    print(data_message)
+    data_df = pd.DataFrame(columns=["output"], index=range(0))
+    new_row = pd.DataFrame([[data_message]], columns=["output"])
+    result_table = st.table(data_df)
+    result_table.add_rows(new_row)
+
     print(b_sum[0])
+    print()
     print(data_message)
 
     message = compare_outputs(label, b_sum[0], data_message)
     print(message)
     output = json.loads(message.content)
-    pref = message.content
+    preference = output["preference"]
 
-    st.write("All data subsets generated!")
+    st.write(f"Output {preference} is preferred.")
+    if int(preference) == 1:
+        st.write(f"Recommended output: {label}{b_sum[0]}")
+    else:
+        data_message = data_message.replace("$", "\$")
+        st.write(f"Recommended output: {data_message}")

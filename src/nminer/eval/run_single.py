@@ -39,6 +39,12 @@ def print_details(env):
         print(f"{f}")
 
 
+def run_supernatural_miner(
+    connection, test_case, all_preds, nr_samples, c_type, cluster
+):
+    pass
+
+
 def run_rl(connection, test_case, all_preds, nr_samples, c_type, cluster):
     """Benchmarks primary method on test case.
 
@@ -52,6 +58,9 @@ def run_rl(connection, test_case, all_preds, nr_samples, c_type, cluster):
     Returns:
         summaries with reward, performance statistics
     """
+    import ipdb
+
+    ipdb.set_trace()
     start_s = time.time()
     cmp_pred = test_case["cmp_pred"]
     test_copy = test_case.copy()
@@ -323,17 +332,17 @@ def main():
                                 p_stats,
                             )
 
-                            sums, p_stats = run_viz(connection, t, all_preds, timeout_s)
-                            log_line(
-                                file,
-                                b_id,
-                                t_id,
-                                nr_facts,
-                                nr_preds,
-                                "viz",
-                                sums,
-                                p_stats,
-                            )
+                            # sums, p_stats = run_viz(connection, t, all_preds, timeout_s)
+                            # log_line(
+                            #     file,
+                            #     b_id,
+                            #     t_id,
+                            #     nr_facts,
+                            #     nr_preds,
+                            #     "viz",
+                            #     sums,
+                            #     p_stats,
+                            # )
 
 
 if __name__ == "__main__":
