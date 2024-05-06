@@ -1,0 +1,81 @@
+[
+    {
+        "dim_cols": [
+            "brand",
+            "processor_type",
+            "graphics_card",
+            "disk_space",
+            "ratings_5max"
+        ],
+        "dims_txt": [
+            "with <V> brand",
+            "with <V> CPU",
+            "with <V> graphics card",
+            "with <V> disk space",
+            "with <V> stars "
+        ],
+        "agg_cols": [
+            "display_size",
+            "discount_price",
+            "old_price"
+        ],
+        "aggs_txt": [
+            "its display size",
+            "its discounted price",
+            "its old price"
+        ],
+        "target": "laptop_name='VivoBook S430'",
+        "preamble": "Among all laptops",
+        "nl_pattern": "arguments for buying 'VivoBook S430'"
+    },
+    {
+        "dim_cols": [
+            "brand"
+        ],
+        "dims_txt": [
+            "with <V> brand"
+        ],
+        "agg_cols": [
+            "display_size",
+            "discount_price",
+            "old_price"
+        ],
+        "aggs_txt": [
+            "its display size",
+            "its discounted price",
+            "its old price"
+        ],
+        "target": "laptop_name='VivoBook S430'",
+        "preamble": "Compared to other laptops",
+        "nl_pattern": "differences from 'VivoBook S430'"
+    },
+    {
+        "dim_cols": [
+            "brand",
+            "processor_type",
+            "graphics_card",
+            "disk_space",
+            "ratings_5max"
+        ],
+        "dims_txt": [
+            "with <V> brand",
+            "with <V> CPU",
+            "with <V> graphics card",
+            "with <V> disk space",
+            "with <V> stars "
+        ],
+        "agg_cols": [
+            "display_size",
+            "discount_price",
+            "old_price"
+        ],
+        "aggs_txt": [
+            "its display size",
+            "its discounted price",
+            "its old price"
+        ],
+        "target": "laptop_name='MacBook Air 13.3'",
+        "preamble": "Among all laptops",
+        "nl_pattern": "reasons MacBook Air 13.3 might underperform"
+    }
+]

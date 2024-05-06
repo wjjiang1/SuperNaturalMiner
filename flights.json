@@ -1,0 +1,156 @@
+[
+    {
+        "dim_cols": [
+            "start_airport",
+            "destination_airport",
+            "airline"
+        ],
+        "dims_txt": [
+            "with flight leaving at <V>",
+            "with flight arriving at <V>",
+            "with <V> airline"
+        ],
+        "agg_cols": [
+            "planned_departure",
+            "planned_arrival_time"
+        ],
+        "aggs_txt": [
+            "its planned departure time",
+            "its planned arrival time"
+        ],
+        "target": "cancelled='cancelled'",
+        "preamble": "Among all flights",
+        "nl_pattern": "why is the flight canceled"
+    },
+    {
+        "dim_cols": [
+            "flight_date",
+            "flight_nr",
+            "start_airport",
+            "destination_airport",
+            "planned_departure",
+            "actual_departure",
+            "wheels_off_time",
+            "wheels_on_time",
+            "planned_arrival_time",
+            "actual_arrival_time",
+            "cancelled",
+            "cancellation_code",
+            "diverted",
+            "planned_flight_time",
+            "distance"
+        ],
+        "dims_txt": [
+            "on <V>",
+            "with number <V>",
+            "from <V>",
+            "to <V>",
+            "scheduled for departure at <V>",
+            "that departed at <V>",
+            "that took off at <V>",
+            "that landed at <V>",
+            "scheduled to arrive at <V>",
+            "that arrived at <V>",
+            "that were <V>",
+            "with cancellation code <V>",
+            "that were <V>",
+            "with a planned flight time of <V> minutes",
+            "with a flight distance of <V> miles"
+        ],
+        "agg_cols": [
+            "departure_delay",
+            "taxi_out_time",
+            "taxi_in_time",
+            "arrival_delay",
+            "actual_time",
+            "air_time",
+            "carrier_delay",
+            "weather_delay",
+            "system_delay",
+            "security_delay",
+            "late_aircraft_delay"
+        ],
+        "aggs_txt": [
+            ", the departure delay",
+            ", the taxi time at departure",
+            ", the taxi time at the destination",
+            ", the arrival delay",
+            ", the actual flight time",
+            ", the air time",
+            ", the carrier delay",
+            ", weather delay",
+            ", airport operations delay",
+            ", security delay",
+            ", delay to to late aircrafts"
+        ],
+        "target": "airline='YX'",
+        "preamble": "Among all flights",
+        "nl_pattern": "it's a great airline"
+    },
+    {
+        "dim_cols": [
+            "start_airport",
+            "destination_airport"
+        ],
+        "dims_txt": [
+            "with flight leaving at <V>",
+            "with flight arriving at <V>"
+        ],
+        "agg_cols": [
+            "planned_departure",
+            "planned_arrival_time",
+            "departure_delay",
+            "carrier_delay",
+            "weather_delay",
+            "system_delay",
+            "security_delay",
+            "late_aircraft_delay"
+        ],
+        "aggs_txt": [
+            "its planned departure time",
+            "its planned arrival time",
+            "its delay for departure",
+            "delay because of carrier",
+            "delay because of weather",
+            "delay because of system",
+            "delay because of security",
+            "delay because of late aircraft"
+        ],
+        "target": "airline='AA'",
+        "preamble": "Among all flights",
+        "nl_pattern": "why fly American Airlines"
+    },
+    {
+        "dim_cols": [
+            "start_airport",
+            "destination_airport"
+        ],
+        "dims_txt": [
+            "with flight leaving at <V>",
+            "with flight arriving at <V>"
+        ],
+        "agg_cols": [
+            "planned_departure",
+            "planned_arrival_time",
+            "departure_delay",
+            "carrier_delay",
+            "weather_delay",
+            "system_delay",
+            "security_delay",
+            "late_aircraft_delay"
+        ],
+        "aggs_txt": [
+            "its planned departure time",
+            "its planned arrival time",
+            "its delay for departure",
+            "delay because of carrier",
+            "delay because of weather",
+            "delay because of system",
+            "delay because of security",
+            "delay because of late aircraft"
+        ],
+        "target": "start_airport='JFK'",
+        "preamble": "Among all airports",
+        "nl_pattern": "why fly from John F Kennedy Interational Airport"
+    }
+]

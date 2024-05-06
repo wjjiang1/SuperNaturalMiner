@@ -1,0 +1,50 @@
+[
+	{
+		"scenario": "Laptops",
+		"dbconnection": "picker:traviszhang:",
+		"table": "laptops",
+		"nr_facts": 1,
+		"nr_preds": 2,
+		"preamble": "Among all laptops",
+		"dimensions": "brand:with <V> brand\nprocessor_type:with <V> CPU\ngraphics_card:with <V> graphics card\ndisk_space:with <V> disk space\nratings_5max:with <V> stars",
+		"aggregates": "display_size:its display size\ndiscount_price:its discounted price\nold_price:its old price",
+		"predicates": "laptop_name='VivoBook S430'\nlaptop_name='Vostro 5471'\nlaptop_name='IdeaPad 330S-15IKB'\nlaptop_name='Aspire 1 A114-31'\nlaptop_name='14-ck0008nx'",
+		"goal": "MateBook D Volta is a great laptop"
+	},
+	{
+		"scenario": "Flights",
+		"dbconnection": "picker:traviszhang:",
+		"table": "flights",
+		"nr_facts": 1,
+		"nr_preds": 2,
+		"preamble": "Among all flights",
+		"dimensions": "flight_date:on <V>\nflight_nr:with number <V>\nstart_airport:from <V>\ndestination_airport:to <V>\nplanned_departure:scheduled for departure at <V>\nactual_departure:that departed at <V>\nwheels_off_time:that took off at <V>\nwheels_on_time:that landed at <V>\nplanned_arrival_time:scheduled to arrive at <V>\nactual_arrival_time:that arrived at <V>\ncancelled:that were <V>\ncancellation_code:with cancellation code <V>\ndiverted:that were <V>\nplanned_flight_time:with a planned flight time of <V> minutes\ndistance:with a flight distance of <V> miles",
+		"aggregates": "departure_delay:, the departure delay\ntaxi_out_time:, the taxi time at departure\ntaxi_in_time:, the taxi time at the destination\narrival_delay:, the arrival delay\nactual_time:, the actual flight time\nair_time:, the air time\ncarrier_delay:, the carrier delay\nweather_delay:, weather delay\nsystem_delay:, airport operations delay\nsecurity_delay:, security delay\nlate_aircraft_delay:, delay to to late aircrafts",
+		"predicates": "airline='YX'\nairline='VX'\nairline='AA'\nairline='B6'\nairline='F9'",
+		"goal": "it's a great airline"
+	},
+	{
+		"scenario": "Tools",
+		"dbconnection": "picker:traviszhang:",
+		"table": "sods19",
+		"nr_facts": 1,
+		"nr_preds": 2,
+		"preamble": "Among all developers",
+		"dimensions": "satisfaction:who are <V> with their job\ndependents:who answered \"<V>\" when asked if they care for dependents\noptimism:who answered \"<V>\" when asked if they feel optimistic\ncodereviews:who answered \"<V>\" when asked if they do code reviews\nunittests:who answered \"<V>\" when asked if they do unit tests\nlanguagesused:who used <V> as programming languages\ncountry:from <V>\ncoarsesalary:with a salary <V>\norgsize:working for a <V> company\njobtype:working <V>\nexperience:who are <V>\ndevrole:who work as <V>\ngender:who are <V>",
+		"aggregates": "salary:, the salary",
+		"predicates": "languagesused like '%Scala%'\nlanguagesused like '%SQL%'\nlanguagesused like '%Go%'\nlanguagesused like '%F#%'\nlanguagesused like '%VBA%'",
+		"goal": "it's a great tool"
+	},
+	{
+		"scenario": "Sales",
+		"dbconnection": "picker:traviszhang:",
+		"table": "liquor",
+		"nr_facts": 1,
+		"nr_preds": 2,
+		"preamble": "Among all liquors",
+		"dimensions": "city:sold in <V>\ncountyname:sold in <V>\ncategoryname:of type <V>\nstorename:sold at <V>\nvendorname:produced by <V>",
+		"aggregates": "bottlessold:, the number of bottles per sale\nsalevalue:, the dollar value per sale\nvolumesold:, the volume per sale",
+		"predicates": "itemname='Deep Eddy Lemon w/2 Tin Cups'\nitemname='HA WB Saffell'\nitemname='UV Pink Lemonade'\nitemname='UV Whipped Mini'\nitemname='Rondiaz Rum White PET'",
+		"goal": "it's a high-revenue item"
+	}
+]

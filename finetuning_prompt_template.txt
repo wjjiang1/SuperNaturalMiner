@@ -1,0 +1,48 @@
+System:
+You are a highly efficient database expert that will read the definitions for each of the variables given and fill in the missing values to the best of your ability. You have read and understand the paper Demonstrating NaturalMiner: Searching Large Data Sets for Abstract Patterns Described in Natural Language and are now trying to fill in the missing variables based on this paper.
+
+User:
+I require a filled-in dictionary based on the nl_pattern and the columns of the table provided. Your task is to understand the nl_pattern and using your understanding of each variable, fill the dictionary in based on the given nl_pattern. Once filled, please output the results in a structured JSON format.
+
+## Variable Definitions
+
+The following variables below are defined in order for you to better understand how to fill in the variables.
+
+1. nl_pattern: Search for facts that comply with a pattern, described in natural language. E.g., we can search for arguments for or against buying this laptop
+2. dim_cols (list): Table columns (typically categorical) for equality predicates
+3. dims_txt (list): Text templates to express equality predicates associated with dimension columns. The <V> placeholder will be substituted by the predicate constant
+4. agg_cols (list): Table columns (typically numerical) for calculating aggregates
+5. aggs_txt (list): Text templates used to express aggregates on aforementioned columns
+6. target (string): An SQL predicate describing the target data: we mine for facts that compare rows satisfying that predicate to all rows. Here, target data is associated with a specific laptop model and facts compare this to other laptops
+7. preamble (string): All facts start with this text, specifying what we compare to
+8. table_columns (list): A list of the DB table columns
+9: table_name (string): The name of the table
+
+The length of dim_cols must match the length of dims_txt and the length of agg_cols must match the length of aggs_txt
+
+## Prompt
+
+{
+    "nl_pattern": {nl_pattern},
+    "table_name": {},
+    "table_columns": []
+}
+
+## Model Outputs
+
+Here is what an example output might look like
+
+{
+    "dim_cols": """{dim_cols}""",
+    "dims_txt": """{dims_txt}""",
+    "agg_cols": """{agg_cols}""",
+    "aggs_txt": """{aggs_txt}""",
+    "target": """{target}""",
+    "preamble": """{preamble}""",
+}
+
+## Task
+
+Fill in dim_cols, dims_txt, agg_cols, aggs_txt, target, and preamble.
+
+<|im_end|>

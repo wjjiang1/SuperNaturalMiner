@@ -1,0 +1,145 @@
+[
+    {
+        "dim_cols": [
+            "itemname",
+            "categoryname"
+        ],
+        "dims_txt": [
+            "with <V> item name",
+            "from the <V> category"
+        ],
+        "agg_cols": [
+            "bottlecost",
+            "retailcost",
+            "salevalue",
+            "bottlessold"
+        ],
+        "aggs_txt": [
+            "its bottle cost",
+            "its retail cost",
+            "its sale value",
+            "Its bottles sold"
+        ],
+        "target": "itemname='Captain Morgan Spiced Rum'",
+        "preamble": "Among all liquors",
+        "nl_pattern": "arguments for buying Captain Morgan Spiced Rum"
+    },
+    {
+        "dim_cols": [
+            "city",
+            "itemname"
+        ],
+        "dims_txt": [
+            "with <V> city",
+            "with <V> item name"
+        ],
+        "agg_cols": [
+            "bottlecost",
+            "retailcost",
+            "salevalue",
+            "bottlessold"
+        ],
+        "aggs_txt": [
+            "its bottle cost",
+            "its retail cost",
+            "its sale value",
+            "Its bottles sold"
+        ],
+        "target": "itemname='Barton Vodka'",
+        "preamble": "Among all liquors from Iowa City",
+        "nl_pattern": "arguments for buying this liquor out of all the liquors from Iowa City"
+    },
+    {
+        "dim_cols": [
+            "city",
+            "itemname",
+            "countyname",
+            "categoryname",
+            "storename",
+            "vendorname"
+        ],
+        "dims_txt": [
+            "sold in <V>",
+            "with <V> item name",
+            "sold in <V>",
+            "of type <V>",
+            "sold at <V>",
+            "produced by <V>"
+        ],
+        "agg_cols": [
+            "bottlecost",
+            "bottlessold",
+            "retailcost",
+            "salevalue",
+            "volumesold"
+        ],
+        "aggs_txt": [
+            "its bottle cost",
+            "the number of bottles per sale",
+            "its retail cost",
+            "the dollar value per salee",
+            "the volume per sale"
+        ],
+        "target": "city='Emmetsburg'",
+        "preamble": "Among all the cities that sell liquor",
+        "nl_pattern": "arguments for buying liquor from Emmetsburg"
+    },
+    {
+        "dim_cols": [
+            "city",
+            "countyname",
+            "categoryname",
+            "storename",
+            "vendorname"
+        ],
+        "dims_txt": [
+            "sold in <V>",
+            "sold in <V>",
+            "of type <V>",
+            "sold at <V>",
+            "produced by <V>"
+        ],
+        "agg_cols": [
+            "bottlessold",
+            "salevalue",
+            "volumesold"
+        ],
+        "aggs_txt": [
+            "the number of bottles per sale",
+            "the dollar value per sale",
+            "the volume per sale"
+        ],
+        "target": "itemname='Deep Eddy Lemon w/2 Tin Cups'",
+        "preamble": "Among all liquors",
+        "nl_pattern": "it's a high-revenue item"
+    },
+    {
+        "dim_cols": [
+            "city",
+            "countyname",
+            "categoryname",
+            "storename",
+            "vendorname"
+        ],
+        "dims_txt": [
+            "sold in <V>",
+            "sold in <V>",
+            "of type <V>",
+            "sold at <V>",
+            "produced by <V>"
+        ],
+        "agg_cols": [
+            "bottlessold",
+            "salevalue",
+            "volumesold"
+        ],
+        "aggs_txt": [
+            "the number of bottles per sale",
+            "the dollar value per sale",
+            "the volume per sale"
+        ],
+        "target": "itemname='UV Pink Lemonade'",
+        "preamble": "Among all liquors",
+        "nl_pattern": "it's been sold the most"
+    }
+]

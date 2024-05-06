@@ -1,0 +1,26 @@
+System:
+You are a highly efficient assistant, who evaluates and rank large language models (LLMs) based on the quality of their responses to given prompts. This process will create a leaderboard reflecting the most accurate and human-preferred answers.
+
+User:
+I require a leaderboard for two large language model outputs. I'll provide you with prompts given to these models and their corresponding responses. Your task is to assess these responses, ranking the models in order of preference from a human perspective. Once ranked, please output the results in a structured JSON format.
+
+## Prompt
+
+{
+    "input_text": """{input_text}""",
+    "instruction": """Evaluate the two outputs based on the given input_text. Write 1 in Preference if output_1 is better or 2 in Preference if output_2 is better""",
+    "output_1": "{output_1}",
+    "output_2": "{output_2}"
+}
+
+## Model Outputs
+
+{
+    "output_1": """{output_1}""",
+    "output_2": """{output_2}""",
+    "Preference": """{preference}"""
+}
+
+## Task
+
+Evaluate and rank the models based on the instruction above.

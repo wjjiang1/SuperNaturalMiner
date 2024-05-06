@@ -1,0 +1,125 @@
+[
+    {
+        "dim_cols": [
+            "country",
+            "orgsize",
+            "jobtype",
+            "experience",
+            "devrole",
+            "gender"
+        ],
+        "dims_txt": [
+            "from <V>",
+            "with <V> org size",
+            "with <V> job type",
+            "with <V> experience",
+            "as the <V> dev role",
+            "who are <V>"
+        ],
+        "agg_cols": [
+            "salary",
+            "satisfication",
+            "dependents",
+            "optimism",
+            "codereviews",
+            "unittests",
+            "languagesused"
+        ],
+        "aggs_txt": [
+            ", the salary",
+            ", the satisfaction",
+            "its dependents",
+            "its optimism",
+            "its codereviews",
+            "its unittests",
+            "languages used"
+        ],
+        "target": "country = 'the United States'",
+        "preamble": "Among all the countries",
+        "nl_pattern": "arguments for the United States"
+    },
+    {
+        "dim_cols": [
+            "satisfaction",
+            "dependents",
+            "optimism",
+            "codereviews",
+            "unittests",
+            "languagesused",
+            "country",
+            "coarsesalary",
+            "orgsize",
+            "jobtype",
+            "experience",
+            "devrole",
+            "gender"
+        ],
+        "dims_txt": [
+            "who are <V> with their job",
+            "who answered \"<V>\" when asked if they care for dependents",
+            "who answered \"<V>\" when asked if they feel optimistic",
+            "who answered \"<V>\" when asked if they do code reviews",
+            "who answered \"<V>\" when asked if they do unit tests",
+            "who used <V> as programming languages",
+            "from <V>",
+            "with a salary <V>",
+            "working for a <V> company",
+            "working <V>",
+            "who are <V>",
+            "who work as <V>",
+            "who are <V>"
+        ],
+        "agg_cols": [
+            "salary"
+        ],
+        "aggs_txt": [
+            "the salary"
+        ],
+        "target": "languagesused like '%Scala%'",
+        "preamble": "Among all developers",
+        "nl_pattern": "it's a great tool"
+    },
+    {
+        "dim_cols": [],
+        "dims_txt": [],
+        "agg_cols": [
+            "salary",
+            "satisfaction",
+            "optimism"
+        ],
+        "aggs_txt": [
+            "with salary greater than <V>",
+            "with satisfaction equal to <V>",
+            "with optimism equal to <V>"
+        ],
+        "target": "salary > 0 AND satisfaction = Yes AND optimism = Yes",
+        "preamble": "Among all respondents",
+        "nl_pattern": "arguments for high salary satisfaction"
+    },
+    {
+        "dim_cols": [],
+        "dims_txt": [],
+        "agg_cols": [
+            "dependents"
+        ],
+        "aggs_txt": [
+            "with dependents equal to <V>"
+        ],
+        "target": "dependents = Yes",
+        "preamble": "Among all respondents",
+        "nl_pattern": "arguments for having dependents in the workplace"
+    },
+    {
+        "dim_cols": [],
+        "dims_txt": [],
+        "agg_cols": [
+            "optimism"
+        ],
+        "aggs_txt": [
+            "with optimism equal to <V> in job performance"
+        ],
+        "target": "optimism = Yes",
+        "preamble": "Among all respondents",
+        "nl_pattern": "arguments for high optimism in job performance"
+    }
+]
