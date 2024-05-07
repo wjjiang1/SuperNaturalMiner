@@ -28,6 +28,8 @@ load_dotenv()
 
 OPENAI_API_KEY = environ.get("OPENAI_API_KEY")
 openai.api_key = OPENAI_API_KEY
+username = environ.get("username")
+dbname = environ.get("dbname")
 
 
 def print_details(env):
@@ -87,8 +89,8 @@ def run_supernaturalminer(
     nl_pattern = cmp_pred_split[1][:-1]
 
     with psycopg2.connect(
-        database="picker",
-        user="traviszhang",
+        database=dbname,
+        user=username,
         cursor_factory=psycopg2.extras.RealDictCursor,
     ) as connection:
         with connection.cursor() as cursor:
