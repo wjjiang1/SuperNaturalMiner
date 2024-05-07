@@ -121,7 +121,9 @@ def run_supernaturalminer(
         content = content[:next_idx] + "'" + content[next_idx + 1 :]
     db_specs = json.loads(content)
     db_specs["table"] = test_copy["table"]
-    db_specs["cmp_preds"] = test_copy["cmp_preds"]
+    target = db_specs['target']
+    del db_specs['target']
+    db_specs["cmp_preds"] = [target]
     dims_txt = db_specs["dims_txt"]
     del db_specs["dims_txt"]
     db_specs["dims_tmp"] = dims_txt
