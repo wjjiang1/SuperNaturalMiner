@@ -19,6 +19,16 @@ from stable_baselines3 import A2C, PPO
 from nminer.sql.pred import all_preds
 from _collections import defaultdict
 
+import openai
+from dotenv import load_dotenv
+from os import environ
+import json
+
+load_dotenv()
+
+OPENAI_API_KEY = environ.get("OPENAI_API_KEY")
+openai.api_key = OPENAI_API_KEY
+
 
 def print_details(env):
     """Prints details about RL results.
@@ -39,10 +49,96 @@ def print_details(env):
         print(f"{f}")
 
 
-def run_supernatural_miner(
+def generate_db_specs(nl_pattern, table_name, table_cols):
+
+    completion = openai.ChatCompletion.create(
+        model="ft:gpt-3.5-turbo-0125:personal:test-1:9LcLIXjl",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a highly efficient database expert that will read the definitions for each of the variables given and fill in the missing values to the best of your ability. You have read and understand the paper Demonstrating NaturalMiner: Searching Large Data Sets for Abstract Patterns Described in Natural Language and are now trying to fill in the missing variables based on this paper.",
+            },
+            {
+                "role": "user",
+                "content": "I require a filled-in dictionary based on the nl_pattern and the columns of the table provided.\nYour task is to understand the nl_pattern and using your understanding of each variable, fill the dictionary in based on the given nl_pattern.\nOnce filled, please output the results in a structured JSON format.\n\nThe following variables below are defined in order for you to better understand how to fill in the variables.\n\n1. nl_pattern: Search for facts that comply with a pattern, described in natural language. E.g., we can search for arguments for or against buying this laptop\n2. dim_cols (list): Table columns (typically categorical) for equality predicates\n3. dims_txt (list): Text templates to express equality predicates associated with dimension columns. The <V> placeholder will be substituted by the predicate constant\n4. agg_cols (list): Table columns (typically numerical) for calculating aggregates\n5. aggs_txt (list): Text templates used to express aggregates on aforementioned columns\n6. target (string): An SQL predicate describing the target data: we mine for facts that compare rows satisfying that predicate to all rows. Here, target data is associated with a specific laptop model and facts compare this to other laptops\n7. preamble (string): All facts start with this text, specifying what we compare to\n8. table_columns (list): A list of the DB table columns\n9. table_name (string): The name of the table\n\nThe length of dim_cols must match the length of dims_txt and the length of agg_cols must match the length of aggs_txt\n\n{\n 'nl_pattern': "
+                + nl_pattern
+                + ",\n 'table_columns': ["
+                + ", ".join(table_cols)
+                + "],\n 'table_name': "
+                + table_name
+                + "\n}\n\nHere is what an example output might look like\n\n{\n 'dim_cols': '{dim_cols}',\n 'dims_txt': '{dims_txt}',\n 'agg_cols': '{agg_cols}',\n 'aggs_txt': '{aggs_txt}',\n 'target': '{target}',\n 'preamble': '{preamble}'\n}\n\nFill in dim_cols, dims_txt, agg_cols, aggs_txt, target, and preamble.",
+            },
+        ],
+    )
+
+    return completion.choices[0].message
+
+
+def run_supernaturalminer(
     connection, test_case, all_preds, nr_samples, c_type, cluster
 ):
-    pass
+    start_s = time.time()
+    cmp_pred = test_case["cmp_pred"]
+    table = test_case["table"]
+    test_copy = test_case.copy()
+    del test_copy["cmp_pred"]
+    test_copy["cmp_preds"] = [cmp_pred]
+    cmp_pred_split = cmp_pred.split("='")
+    nl_pattern = cmp_pred_split[1][:-1]
+
+    with psycopg2.connect(
+        database="picker",
+        user="traviszhang",
+        cursor_factory=psycopg2.extras.RealDictCursor,
+    ) as connection:
+        with connection.cursor() as cursor:
+            # Define the query to get column information
+            query = """
+                SELECT column_name, data_type
+                FROM information_schema.columns
+                WHERE table_name = %s;
+            """
+
+            # Execute the query
+            cursor.execute(query, (table,))
+
+            # Fetch all rows
+            rows = cursor.fetchall()
+
+            # Create a list of strings containing column name and type
+            column_info = [f"{row['column_name']} {row['data_type']}" for row in rows]
+
+    message = generate_db_specs(nl_pattern, table, column_info)
+    content = message.content.replace("'", '"')
+    idx = content.find("=")
+    if idx != -1:
+        content = content[: idx + 1] + "'" + content[idx + 2 :]
+        next_idx = content.find('"', idx + 1)
+        content = content[:next_idx] + "'" + content[next_idx + 1 :]
+    db_specs = json.loads(content)
+    db_specs["table"] = test_copy["table"]
+    db_specs["cmp_preds"] = test_copy["cmp_preds"]
+    dims_txt = db_specs["dims_txt"]
+    del db_specs["dims_txt"]
+    db_specs["dims_tmp"] = dims_txt
+    del db_specs["target"]
+    db_specs["nr_facts"] = test_copy["nr_facts"]
+    db_specs["nr_preds"] = test_copy["nr_preds"]
+    db_specs["degree"] = test_copy["degree"]
+    db_specs["max_steps"] = test_copy["max_steps"]
+
+    env = nminer.algs.rl.PickingEnv(
+        connection, **test_copy, all_preds=all_preds, c_type=c_type, cluster=cluster
+    )
+    model = A2C("MlpPolicy", env, verbose=True, gamma=1.0, normalize_advantage=True)
+    model.learn(total_timesteps=nr_samples)
+    total_s = time.time() - start_s
+    logging.debug(f"Optimization took {total_s} seconds")
+
+    p_stats = {"time": total_s}
+    p_stats.update(env.statistics())
+
+    return env.s_eval.text_to_reward, p_stats
 
 
 def run_rl(connection, test_case, all_preds, nr_samples, c_type, cluster):
@@ -58,9 +154,6 @@ def run_rl(connection, test_case, all_preds, nr_samples, c_type, cluster):
     Returns:
         summaries with reward, performance statistics
     """
-    import ipdb
-
-    ipdb.set_trace()
     start_s = time.time()
     cmp_pred = test_case["cmp_pred"]
     test_copy = test_case.copy()
@@ -212,10 +305,10 @@ def main():
     outpath = args.out
     nr_samples = args.samples
 
-    # log_level = getattr(logging, args.log.upper(), None)
-    # if not isinstance(log_level, int):
-    #     raise ValueError(f"Invalid log level: {args.log}")
-    logging.basicConfig(level=logging.INFO, filemode="w")
+    log_level = getattr(logging, args.log.upper(), None)
+    if not isinstance(log_level, int):
+        raise ValueError(f"Invalid log level: {args.log}")
+    logging.basicConfig(level=log_level, filemode="w")
 
     with open(outpath, "w") as file:
         file.write(
@@ -261,6 +354,20 @@ def main():
                                 p_stats,
                             )
 
+                            sums, p_stats = run_supernaturalminer(
+                                connection, t, all_preds, nr_samples, "proactive", False
+                            )
+                            log_line(
+                                file,
+                                b_id,
+                                t_id,
+                                nr_facts,
+                                nr_preds,
+                                "supernaturalminer_rlNCproactive",
+                                sums,
+                                p_stats,
+                            )
+
                             # for c_type in ['empty', 'proactive']:
                             for c_type in ["proactive"]:
                                 sums, p_stats = run_sampling(
@@ -287,6 +394,20 @@ def main():
                                     nr_facts,
                                     nr_preds,
                                     "rl" + c_type,
+                                    sums,
+                                    p_stats,
+                                )
+
+                                sums, p_stats = run_supernaturalminer(
+                                    connection, t, all_preds, nr_samples, c_type, True
+                                )
+                                log_line(
+                                    file,
+                                    b_id,
+                                    t_id,
+                                    nr_facts,
+                                    nr_preds,
+                                    "supernaturalminer_rl" + c_type,
                                     sums,
                                     p_stats,
                                 )
