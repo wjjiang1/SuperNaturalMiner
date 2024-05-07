@@ -26,6 +26,8 @@ import json
 
 load_dotenv()
 
+print(nminer.__file__)
+
 OPENAI_API_KEY = environ.get("OPENAI_API_KEY")
 openai.api_key = OPENAI_API_KEY
 username = environ.get("username")
@@ -130,7 +132,7 @@ def run_supernaturalminer(
     db_specs["max_steps"] = test_copy["max_steps"]
 
     env = nminer.algs.rl.PickingEnv(
-        connection, **test_copy, all_preds=all_preds, c_type=c_type, cluster=cluster
+        connection, **db_specs, all_preds=all_preds, c_type=c_type, cluster=cluster
     )
     model = A2C("MlpPolicy", env, verbose=True, gamma=1.0, normalize_advantage=True)
     model.learn(total_timesteps=nr_samples)
