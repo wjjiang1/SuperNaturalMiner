@@ -112,17 +112,22 @@ def run_supernaturalminer(
             # Create a list of strings containing column name and type
             column_info = [f"{row['column_name']} {row['data_type']}" for row in rows]
 
-    message = generate_db_specs(nl_pattern, table, column_info)
-    content = message.content.replace("'", '"')
-    idx = content.find("=")
-    if idx != -1:
-        content = content[: idx + 1] + "'" + content[idx + 2 :]
-        next_idx = content.find('"', idx + 1)
-        content = content[:next_idx] + "'" + content[next_idx + 1 :]
-    db_specs = json.loads(content)
+    while True:
+        try:
+            message = generate_db_specs(nl_pattern, table, column_info)
+            content = message.content.replace("'", '"')
+            idx = content.find("=")
+            if idx != -1:
+                content = content[: idx + 1] + "'" + content[idx + 2 :]
+                next_idx = content.find('"', idx + 1)
+                content = content[:next_idx] + "'" + content[next_idx + 1 :]
+            db_specs = json.loads(content)
+            break
+        except:
+            pass
+            
     db_specs["table"] = test_copy["table"]
     target = db_specs["target"]
-    print(db_specs.keys())
     del db_specs["target"]
     db_specs["cmp_preds"] = [target]
     dims_txt = db_specs["dims_txt"]

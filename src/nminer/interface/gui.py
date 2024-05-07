@@ -174,14 +174,19 @@ if st.button("Find Pattern!"):
             # Create a list of strings containing column name and type
             column_info = [f"{row['column_name']} {row['data_type']}" for row in rows]
 
-    message = generate_db_specs(label, table, column_info)
-    content = message.content.replace("'", '"')
-    idx = content.find("=")
-    if idx != -1:
-        content = content[: idx + 1] + "'" + content[idx + 2 :]
-        next_idx = content.find('"', idx + 1)
-        content = content[:next_idx] + "'" + content[next_idx + 1 :]
-    db_specs = json.loads(content)
+    while True:
+        try:
+            message = generate_db_specs(label, table, column_info)
+            content = message.content.replace("'", '"')
+            idx = content.find("=")
+            if idx != -1:
+                content = content[: idx + 1] + "'" + content[idx + 2 :]
+                next_idx = content.find('"', idx + 1)
+                content = content[:next_idx] + "'" + content[next_idx + 1 :]
+            db_specs = json.loads(content)
+            break
+        except:
+            pass
 
     print(content)
     print(db_specs)
@@ -276,9 +281,14 @@ if st.button("Find Pattern!"):
     print()
     print(data_message)
 
-    message = compare_outputs(label, b_sum[0], data_message)
-    print(message)
-    output = json.loads(message.content)
+    while True:
+        try:
+            message = compare_outputs(label, b_sum[0], data_message)
+            print(message)
+            output = json.loads(message.content)
+            break
+        except:
+            pass
     preference = output["preference"]
 
     st.write(f"Output {preference} is preferred.")
