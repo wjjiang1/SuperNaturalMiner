@@ -45,7 +45,7 @@ import nminer.text.sum
 st.set_page_config(page_title="NaturalMiner")
 st.markdown(
     """
-NaturalMiner mines large data sets for patterns described in natural language.
+SuperNaturalMiner mines databases and autofills in your sentence by generating statistics and semantics.
 """
 )
 
@@ -83,9 +83,16 @@ def generate_data_response(db, input_text):
     then look at the results of the query and return the answer. Remove the ``` in the response.
     The input text: {input_text}
     """
-    llm = OpenAI(temperature=0, api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo")
-    db_chain = SQLDatabaseChain(llm=llm, database=db, verbose=True, top_k=3)
-    data_text = db_chain.run(PROMPT.format(input_text=input_text))
+    while True:
+        try:
+            llm = OpenAI(
+                temperature=0, api_key=OPENAI_API_KEY, model_name="gpt-3.5-turbo"
+            )
+            db_chain = SQLDatabaseChain(llm=llm, database=db, verbose=True, top_k=3)
+            data_text = db_chain.run(PROMPT.format(input_text=input_text))
+            break
+        except:
+            pass
     return data_text
 
 

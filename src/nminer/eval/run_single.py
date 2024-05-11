@@ -125,11 +125,12 @@ def run_supernaturalminer(
             break
         except:
             pass
-            
+
     db_specs["table"] = test_copy["table"]
-    target = db_specs["target"]
+    # target = db_specs["target"]
     del db_specs["target"]
-    db_specs["cmp_preds"] = [target]
+    # db_specs["cmp_preds"] = [target]
+    db_specs["cmp_preds"] = test_copy["cmp_preds"]
     dims_txt = db_specs["dims_txt"]
     del db_specs["dims_txt"]
     db_specs["dims_tmp"] = dims_txt
